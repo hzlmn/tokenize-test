@@ -29,22 +29,22 @@ var CharTypes = {
  * @type TokenTypes
  * Available types for Token
  */
-var TokenTypes {
-  Empty = 0,
-  Space = 1
-  Word = 2,
-  AtWord = 3,
-  Brackets = 4,
-  String = 5,
-  Comment = 6,
-  OpenCurly = 7,
-  CloseCurly = 8,
-  OpenBracket = 9,
-  CloseBracket = 10,
-  Colon = 11,
-  Semicolon = 12,
-  OpenParen = 13,
-  CloseParen = 14
+var TokenTypes = {
+  Empty: 0,
+  Space: 1
+  Word: 2,
+  AtWord: 3,
+  Brackets: 4,
+  String: 5,
+  Comment: 6,
+  OpenCurly: 7,
+  CloseCurly: 8,
+  OpenBracket: 9,
+  CloseBracket: 10,
+  Colon: 11,
+  Semicolon: 12,
+  OpenParen: 13,
+  CloseParen: 14
 }
 
 /**
@@ -56,6 +56,53 @@ var MATCH_DIGIT = /^[0-9]+$/
  * Match literal value regex
  */
 var MATCH_LITERAL = /^[a-z]+$/i
+
+
+/**
+ * Base structure for reading source char by char
+ */
+function CharReader(source) {
+
+    /**
+     * @private 
+     * Internal state
+     */
+    var $cursor = 0, 
+        line = 1, 
+        column = 0
+        length = source.length,
+        currentChar
+    
+
+    /**
+     * Check if end of file was reached
+     * @returns {boolean}
+     */
+    function EOF() { return $cursor >= length }
+
+    /**
+     * Read next character from source
+     * @returns {number} charCode
+     */
+    function readNextCharacter() {
+        currentChar = source.charCodeAt($cursor++)
+        return currentChar
+    }
+
+    /**
+     * Peek current character
+     * @returns {number} charCode
+     */
+    function peekCurrent() {
+        return currentChar
+    }
+
+    return {
+        EOF: EOF,
+        readNextCharacter: readNextCharacter,
+        peekCurrent: peekCurrent
+    }
+}
 
 /**
  * Collect whitespaces and returns token
